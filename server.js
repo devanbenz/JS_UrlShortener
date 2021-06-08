@@ -44,6 +44,7 @@ let urlCount = 0
 
 app.post('/api/shorturl', (req ,res) => {
   // Check URL with regex 
+
   if(urlRegex.test(req.body.url) == false){
     res.json({error: 'invalid url'})
   } 
