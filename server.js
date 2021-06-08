@@ -8,6 +8,7 @@ const dns = require('dns')
 // Basic Configuration
 const port = process.env.PORT || 3000;
 
+const urlRegex = new RegExp('(^http|https):\/\/www\.[a-zA-Z0-9]*\.[a-zA-Z0-9]*')
 
 // ------------------------ MONGO DB STUFF ----------------------------------------------
 // MongoDB uri
@@ -42,6 +43,11 @@ app.get('/api/hello', function(req, res) {
 let urlCount = 0
 
 app.post('/api/shorturl', (req ,res) => {
+  // Check URL with regex 
+  if(urlRegex.test(req.body.url) == false){
+    res.json({error: 'invalid url'})
+  } 
+
   // Check url to verify it is valid 
   // dns.lookup( req.body.url, (x,y) => {
   //   if (x) res.json({error: 'invalid url'})
@@ -49,7 +55,7 @@ app.post('/api/shorturl', (req ,res) => {
 
   // send as response object 
   res.json({original_url: req.body.url, short_url: urlCount})
-  
+
   // Add url model to database
   const url = new Urls({ url: req.body.url, id: urlCount})
   urlCount++
