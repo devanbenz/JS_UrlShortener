@@ -43,9 +43,9 @@ let urlCount = 0
 
 app.post('/api/shorturl', (req ,res) => {
   // Check url to verify it is valid 
-  dns.lookup( req.body.url, (x,y) => {
-    if (x) res.json({error: 'invalid url'})
-  })
+  // dns.lookup( req.body.url, (x,y) => {
+  //   if (x) res.json({error: 'invalid url'})
+  // })
 
   // send as response object 
   res.json({original_url: req.body.url, short_url: urlCount})
