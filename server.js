@@ -43,21 +43,20 @@ app.get('/api/hello', function(req, res) {
 let urlCount = 0
 
 app.post('/api/shorturl', (req ,res) => {
-  // Check URL with regex 
+  const urlA = new URL(req.body.url)
 
-  if(urlRegex.test(req.body.url)){
-    // send as response object 
-    res.json({original_url: req.body.url, short_url: urlCount})
-    
-    // Add url model to database
-    const url = new Urls({ url: req.body.url, id: urlCount})
-    urlCount++
-    url.save( err => {
-      if (err) console.error(err)
-    })
-  } else {
-    res.json({error: 'invalid url'})
-  }
+  dns.lookup(urlA.hostname, (err) => {
+    if (err) { res.json({error: 'invalid url'})}
+  })
+
+  // send as response object 
+  res.json({original_url: urlA.href, short_url: urlCount})
+  // Add url model to database
+  const url = new Urls({ url: urlA.href, id: urlCount})
+  urlCount++
+  url.save( err => {
+    if (err) console.error(err)
+  })
 })
 
 app.get('/api/shorturl/:id', async (req, res) => {
