@@ -28,6 +28,7 @@ const Urls = mongoose.model('Urls', UrlSchema)
 // Middlewares 
 app.use(cors());
 app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.json())
 app.use('/public', express.static(`${process.cwd()}/public`));
 
 app.get('/', function(req, res) {
@@ -44,16 +45,21 @@ let urlCount = 0
 
 app.post('/api/shorturl', (req ,res) => {
   const urlA = new URL(req.body.url)
-  dns.lookup(urlA.hostname, (err) => {
-    if (err || urlA.protocol != 'http:' || urlA.protocol != 'https:') { res.json({error: 'invalid url'})}
-  })
-  // send as response object  
-  res.json({original_url: urlA.href, short_url: urlCount})
-  // Add url model to database
-  const url = new Urls({ url: urlA.href, id: urlCount})
-  urlCount++
-  url.save( err => {
-    if (err) console.error(err)
+  
+  dns.lookup(urlA.hostname, (err, address) => {
+    if (err && urlA.protocol != 'http:' && urlA.protocol != 'https:') { 
+      res.status(400).json({error: 'invalid url'})
+    }
+    else {
+      // Add url model to database
+      const url = new Urls({ url: urlA.href, id: urlCount})
+      urlCount++
+      url.save( err => {
+        if (err) console.error(err)
+      })
+      // Need to return res 
+      return res.status(200).json({original_url: urlA.href, short_url: urlCount})
+     }
   })
 })
 
