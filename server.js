@@ -8,8 +8,6 @@ const dns = require('dns')
 // Basic Configuration
 const port = process.env.PORT || 3000;
 
-const urlRegex = new RegExp('(^http|https):\/\/www\.[a-zA-Z0-9]*\.[a-zA-Z0-9]*')
-
 // ------------------------ MONGO DB STUFF ----------------------------------------------
 // MongoDB uri
 const uri = 'mongodb+srv://devan:GWgJc5Uh9YP1lAH7@free-cc-cluster.dq2ed.mongodb.net/'
@@ -44,21 +42,22 @@ app.get('/api/hello', function(req, res) {
 let urlCount = 0
 
 app.post('/api/shorturl', (req ,res) => {
-  const urlA = new URL(req.body.url)
-  
-  dns.lookup(urlA.hostname, (err, address) => {
-    if (err && urlA.protocol != 'http:' && urlA.protocol != 'https:') { 
+  const url = new URL(req.body.url)
+
+  dns.lookup(url.hostname, (err, address) => {
+
+    if (err || ( url.protocol != 'http:' && url.protocol != 'https:' ) ) {
       res.status(400).json({error: 'invalid url'})
     }
     else {
       // Add url model to database
-      const url = new Urls({ url: urlA.href, id: urlCount})
+      const DBurl = new Urls({ url: url.href, id: urlCount})
       urlCount++
-      url.save( err => {
+      DBurl.save( err => {
         if (err) console.error(err)
       })
       // Need to return res 
-      return res.status(200).json({original_url: urlA.href, short_url: urlCount})
+      return res.status(200).json({original_url: url.href, short_url: urlCount})
      }
   })
 })
