@@ -44,12 +44,10 @@ let urlCount = 0
 
 app.post('/api/shorturl', (req ,res) => {
   const urlA = new URL(req.body.url)
-
   dns.lookup(urlA.hostname, (err) => {
-    if (err) { res.json({error: 'invalid url'})}
+    if (err || urlA.protocol != 'http:' || urlA.protocol != 'https:') { res.json({error: 'invalid url'})}
   })
-
-  // send as response object 
+  // send as response object  
   res.json({original_url: urlA.href, short_url: urlCount})
   // Add url model to database
   const url = new Urls({ url: urlA.href, id: urlCount})
