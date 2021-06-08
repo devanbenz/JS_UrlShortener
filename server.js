@@ -45,19 +45,19 @@ let urlCount = 0
 app.post('/api/shorturl', (req ,res) => {
   // Check URL with regex 
 
-  if(urlRegex.test(req.body.url) == false){
-    res.json({error: 'invalid url'})
+  if(urlRegex.test(req.body.url)){
+    // send as response object 
+    res.json({original_url: req.body.url, short_url: urlCount})
+    
+    // Add url model to database
+    const url = new Urls({ url: req.body.url, id: urlCount})
+    urlCount++
+    url.save( err => {
+      if (err) console.error(err)
+    })
   } else {
-      // send as response object 
-      res.json({original_url: req.body.url, short_url: urlCount})
-      
-      // Add url model to database
-      const url = new Urls({ url: req.body.url, id: urlCount})
-      urlCount++
-      url.save( err => {
-        if (err) console.error(err)
-      })
-    }
+    res.json({error: 'invalid url'})
+  }
 })
 
 app.get('/api/shorturl/:id', async (req, res) => {
