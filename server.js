@@ -45,9 +45,9 @@ let urlCount = 0
 app.post('/api/shorturl', (req ,res) => {
   // Check URL with regex 
 
-  if(urlRegex.test(req.body.url) == false){
-    res.json({error: 'invalid url'})
-  } 
+  // if(urlRegex.test(req.body.url) == false){
+  //   res.json({error: 'invalid url'})
+  // } 
 
   // Check url to verify it is valid 
   // dns.lookup( req.body.url, (x,y) => {
