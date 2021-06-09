@@ -62,8 +62,8 @@ app.post('/api/shorturl', (req ,res) => {
   })
 })
 
-app.get('/api/shorturl/:id', async (req, res) => {
-  const x = await Urls.find({ short_url:req.params.id })
+app.get('/api/shorturl/:short_url', async (req, res) => {
+  const x = await Urls.find({ short_url:req.params.short_url })
   res.redirect(x[0].original_url)
 })
 
