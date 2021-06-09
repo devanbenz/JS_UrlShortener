@@ -39,7 +39,7 @@ app.get('/api/hello', function(req, res) {
 });
 
 // Create an id counter - need to increment per post so that way the db stores the urls 
-let urlCount = 0
+let urlCount = 1
 
 app.post('/api/shorturl', (req ,res) => {
   const url = new URL(req.body.url)
@@ -65,7 +65,7 @@ app.post('/api/shorturl', (req ,res) => {
 app.get('/api/shorturl/:short_url', async (req, res) => {
 
   try{
-    const x = await Urls.findOne({ short_url:req.params.short_url })
+    const x = await Urls.find({ short_url:req.params.short_url })
     res.redirect(x[0].original_url)
   
   } catch(e) { 
