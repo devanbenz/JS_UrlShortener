@@ -47,7 +47,7 @@ app.post('/api/shorturl', (req ,res) => {
   dns.lookup(url.hostname, (err, address) => {
 
     if (err || ( url.protocol != 'http:' && url.protocol != 'https:' ) ) {
-      res.status(400).json({error: 'invalid url'})
+      res.json({error: 'invalid url'})
     }
     else {
       // Add url model to database
@@ -57,7 +57,7 @@ app.post('/api/shorturl', (req ,res) => {
         if (err) console.error(err)
       })
       // Need to return res 
-      return res.status(200).json({original_url: url.href, short_url: urlCount})
+      res.json({original_url: url.href, short_url: urlCount})
      }
   })
 })
