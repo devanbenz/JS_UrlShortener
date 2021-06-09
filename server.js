@@ -64,7 +64,8 @@ app.post('/api/shorturl', (req ,res) => {
 
 app.get('/api/shorturl/:short_url', async (req, res) => {
   const x = await Urls.find({ short_url:req.params.short_url })
-  res.redirect(x[0].original_url)
+  if (x) {res.redirect(x[0].original_url)}
+  else { res.status(404).send('not found')}
 })
 
 app.listen(port, function() {
