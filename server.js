@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000;
 
 // ------------------------ MONGO DB STUFF ----------------------------------------------
 // MongoDB uri
-const uri = 'mongodb+srv://devan:GWgJc5Uh9YP1lAH7@free-cc-cluster.dq2ed.mongodb.net/'
+const uri = MONGO_URI
 // Connect to mongodb with mongoose 
 const db = mongoose.connect(uri, {useNewUrlParser:true, useUnifiedTopology: true})
 
