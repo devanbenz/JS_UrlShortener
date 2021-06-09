@@ -16,8 +16,8 @@ const db = mongoose.connect(uri, {useNewUrlParser:true, useUnifiedTopology: true
 
 // Create url schema 
 const UrlSchema = mongoose.Schema({
-  url: String,
-  id: Number
+  original_url: String,
+  short_url: Number
 })
 // Create a URL model out of the schema 
 const Urls = mongoose.model('Urls', UrlSchema)
@@ -51,7 +51,7 @@ app.post('/api/shorturl', (req ,res) => {
     }
     else {
       // Add url model to database
-      const DBurl = new Urls({ url: url.href, id: urlCount})
+      const DBurl = new Urls({ original_url: url.href, short_url: urlCount})
       urlCount++
       DBurl.save( err => {
         if (err) console.error(err)
