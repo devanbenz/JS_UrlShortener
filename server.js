@@ -52,11 +52,11 @@ app.post('/api/shorturl', (req ,res) => {
     else {
       // Add url model to database
       const DBurl = new Urls({ original_url: url.href, short_url: urlCount})
-      urlCount++
       DBurl.save( err => {
         if (err) console.error(err)
       })
       // Need to return res 
+      urlCount++
       res.json({original_url: url.href, short_url: urlCount})
      }
   })
