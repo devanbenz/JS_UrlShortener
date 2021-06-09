@@ -56,10 +56,10 @@ app.post('/api/shorturl', (req ,res) => {
         if (err) console.error(err)
       })
       // Need to return res 
-      urlCount++
       res.json({original_url: url.href, short_url: urlCount})
-     }
+    }
   })
+  urlCount++
 })
 
 app.get('/api/shorturl/:short_url', async (req, res) => {
